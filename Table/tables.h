@@ -30,7 +30,7 @@ struct recrd// структура рядка таблиці
 			   // ознака вилучення 
 	char _del;	// mark of deleted record
 };
-#define ASM 1	// без вставок на Асемблері, коли 0
+#define ASM 0	// без вставок на Асемблері, коли 0
 // when 0 - without Assembler insertions
 //------------------------------------------------------
 // обробка записів таблиць за прямою адресою
@@ -114,4 +114,5 @@ struct recrd*updBin(struct keyStr, struct recrd*pElm,
 //New functions of mine:
 
 //Counts the number of letters present in both  
+unsigned int coincSymbs(const char *pLeft, const char *pRight);
 unsigned int coincSymbs(struct recrd*pLeft, struct recrd*pRight);

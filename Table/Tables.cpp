@@ -210,11 +210,13 @@ struct recrd*insBin(struct recrd*pElm, struct recrd*tb, int*pQnElm) {
 	int n;
 	if (pr) {
 		pr->func = pElm->func;
+		(*pQnElm)++;
 		return pr;
 	} else 
 		for (n = *pQnElm; n > 0; n--)
 			tb[n] = tb[n - 1];
 	tb[n] = *pElm;
+	(*pQnElm)++;
 	return &tb[n];
 }
 // вилучення за двійковим пошуком
@@ -243,15 +245,18 @@ struct recrd*updBin(struct keyStr, struct recrd*pElm, struct recrd*tb, int*pQnEl
 //new functions of mine:
 #include <string.h>
 #include <ctype.h>
-unsigned int coincSymbs(struct recrd*pLeft, struct recrd*pRight) {
+unsigned int coincSymbs(const char *pLeft, const char *pRight) {
 	int i = 0;
 	int res = 0;
-	char* left = _strdup(pLeft->key.str);
-	char* right = _strdup(pRight->key.str);
+	char* left = _strdup(pLeft);
+	char* right = _strdup(pRight);
 	for (char* temp = left; *temp; temp++) *temp = tolower(*temp);
 	for (char* temp = right; *temp; temp++) *temp = tolower(*temp);
 	while (char c = left[i++])
 		if (strchr(right, c))
 			res++;
 	return res;
+}
+unsigned int coincSymbs(struct recrd*pLeft, struct recrd*pRight) {
+	return coincSymbs(pLeft->key.str, pRight->key.str);
 }
