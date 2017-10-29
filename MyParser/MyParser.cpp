@@ -59,10 +59,30 @@ std::list<parser::Token> parser::additional::classify(std::list<std::string> sou
 	return ret;
 }
 
-std::list<parser::Token> parser::parse(std::string source) {
+graph::Node parser::additional::parse_graph(std::list<std::string> source) {
+	return graph::Node();
+}
+
+std::list<parser::Token> parser::parse_tokens(std::string source) {
 	auto simplified = additional::simplify(source);
 	auto tokens = additional::parse_code(simplified);
 	auto united = additional::unite(tokens);
 	auto classified = additional::classify(united);
 	return classified;
+}
+
+std::list<Graph> parser::parse_syntax(std::string source) {
+	auto simplified = additional::simplify(source);
+	auto tokens = additional::parse_code(simplified);
+	auto united = additional::unite(tokens);
+
+	std::list<Graph> ret;
+	auto start = united.begin();
+	for (auto it = united.begin(); it != united.end(); it++) 
+		if (*it == ";") {
+			ret.push_back(additional::parse_graph({start, it}));
+			std::list<std::string>(start, it);
+			start = it; start++;
+		}
+	return ret;
 }
