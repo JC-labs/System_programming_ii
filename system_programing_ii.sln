@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab3_GUI", "Lab3_GUI\Lab3_G
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyParser", "MyParser\MyParser.vcxproj", "{D7023774-AF4F-476C-B276-F8DB684D8F07}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab4_GUI", "Lab4_GUI\Lab4_GUI.vcxproj", "{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,6 +69,12 @@ Global
 		{D7023774-AF4F-476C-B276-F8DB684D8F07}.Release|x64.Build.0 = Release|x64
 		{D7023774-AF4F-476C-B276-F8DB684D8F07}.Release|x86.ActiveCfg = Release|Win32
 		{D7023774-AF4F-476C-B276-F8DB684D8F07}.Release|x86.Build.0 = Release|Win32
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Debug|x64.ActiveCfg = Debug|x64
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Debug|x64.Build.0 = Debug|x64
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Debug|x86.ActiveCfg = Debug|x64
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Release|x64.ActiveCfg = Release|x64
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Release|x64.Build.0 = Release|x64
+		{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

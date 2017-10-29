@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Graph.hpp" />
     <ClInclude Include="MyParser.hpp" />
     <ClInclude Include="Token.hpp" />
   </ItemGroup>
