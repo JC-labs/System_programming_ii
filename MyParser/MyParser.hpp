@@ -12,6 +12,7 @@ namespace parser {
 		std::list<Token> classify(std::list<std::string> source);
 
 		std::list<graph::Node> parse_brackets(std::list<graph::Node> source);
+		graph::Node parse_operators(std::list<graph::Node> source);
 		graph::Node* parse_graph(std::list<graph::Node> source);
 		graph::Node* parse_graph(std::list<Token> source);
 	}

@@ -4,11 +4,14 @@ enum class NodeType {
 	Unknown = 0,
 	Empty = 1,
 	Punctuator = 2,
-	Bracket = 3,
-	Operator = 4,
-	Reserved = 5,
-	Literal = 6,
-	Variable = 7
+	Bracket_op = 3,
+	Bracket_cl = 4,
+	Brackets = 5,
+	Operator_u = 6,
+	Operator_b = 7,
+	Reserved = 8,
+	Literal = 9,
+	Variable = 10
 };
 namespace graph {
 	struct Node {
