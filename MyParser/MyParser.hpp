@@ -1,13 +1,14 @@
 #pragma once
-#include "Lexeme.hpp"
-#include <string>
+#include "Token.hpp"
 #include <list>
 namespace parser {
 	namespace additional {
-		//std::list<std::string> parse_code(std::string source);
-		//std::list<Lexeme> parse_operator(std::string source);
+		bool is_token(char c);
 
 		std::string simplify(std::string source);
+		std::list<std::string> parse_code(std::string source);
+		std::list<std::string> unite(std::list<std::string> source);
+		std::list<Token> classify(std::list<std::string> source);
 	}
-	Lexeme parse(std::string source);
+	std::list<Token> parse(std::string source);
 };
