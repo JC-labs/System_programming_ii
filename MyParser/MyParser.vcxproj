@@ -116,6 +116,7 @@
     <ClInclude Include="Token.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="MyParser.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>

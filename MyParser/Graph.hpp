@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <ostream>
 enum class NodeType {
 	Unknown = 0,
 	Empty = 1,
@@ -27,10 +28,14 @@ namespace graph {
 		//	if (left) delete left;
 		//	if (right) delete right;
 		//}
+		friend std::ostream& operator<<(std::ostream &s, Node *n);
 	};
 }
 class Graph {
 	graph::Node *m_node;
 public:
 	Graph(graph::Node *n) : m_node(n) {}
+	friend std::ostream& operator<<(std::ostream &s, Graph *n);
+	std::string to_string();
 };
+
