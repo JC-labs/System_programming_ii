@@ -86,7 +86,10 @@ std::list<graph::Node> parser::additional::parse_brackets(std::list<graph::Node>
 			return source;
 		}
 	}
-	return source;
+	//if (source.size() == 1 || source.front().type == NodeType::Operator_u)
+		return source;
+	//else
+	//	throw std::exception("Something's wrong with brackets.");
 }
 
 graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
@@ -119,7 +122,10 @@ graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
 			}
 		}
 	}
-	return source.front();
+	if (source.size() == 1)
+		return source.front();
+	else
+		throw std::exception("Something's wrong with syntax.");
 }
 
 graph::Node* parser::additional::parse_graph(std::list<graph::Node> source) {
