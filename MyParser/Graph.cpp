@@ -9,17 +9,15 @@ std::ostream & graph::operator<<(std::ostream &s, Node *n) {
 		if (n->value == "{}")
 			s << n->left << "{" << n->right << "}";
 		else if (n->value == "()")
-			s << n->left << "(" << n->right << ")";
+			s << "(" << n->right << ")";
 		else if (n->value == "[]")
 			s << n->left << "[" << n->right << "]";
 		else if (n->value == "--")
 			s << "--" << n->right;
 		else if (n->value == "++")
 			s << "++" << n->right;
-		else if (n->value == "=")
-			s << n->left << " = " << n->right;
-		else if (n->value == "==")
-			s << n->left << " == " << n->right;
+		else if (n->value == "+" || n->value == "-" || n->value == "*" || n->value == "/" || n->value == "=" || n->value == "==")
+			s << n->left << " " << n->value << " " << n->right;
 		else
 			s << n->value;
 	}
