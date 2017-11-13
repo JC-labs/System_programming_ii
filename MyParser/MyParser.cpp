@@ -12,11 +12,12 @@ std::string parser::additional::simplify(std::string source) {
 	for (size_t i = 0; i < source.size(); i++) {
 		if (source[i] == '\n' || source[i] == '\t')
 			source[i] = ' ';
-		if (parser::additional::is_token(source[i])) {
+		if (parser::additional::is_token(source[i]) || source[i] == ' ' || isalnum(source[i])) {
 			source.insert(i + 1, " ");
 			source.insert(i, " ");
 			i += 2;
-		}
+		} else
+			throw std::exception("Unknown symbol was found.");
 	}
 	return source;
 }
