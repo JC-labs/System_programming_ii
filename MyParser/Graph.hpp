@@ -29,6 +29,7 @@ namespace graph {
 		//	if (right) delete right;
 		//}
 		friend std::ostream& operator<<(std::ostream &s, Node *n);
+		std::string text();
 	};
 }
 class Graph {

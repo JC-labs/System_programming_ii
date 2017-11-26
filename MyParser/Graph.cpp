@@ -28,3 +28,26 @@ std::string Graph::to_string() {
 	s << this;
 	return s.str();
 }
+
+std::string to_text(NodeType n) {
+	switch (n) {
+		default:
+		case NodeType::Unknown: return "Unknown";
+		case NodeType::Empty: return "Empty";
+		case NodeType::Punctuator: return "Punctuator";
+		case NodeType::Bracket_op: return "Opening Bracket";
+		case NodeType::Bracket_cl: return "Closing Bracket";
+		case NodeType::Brackets: return "Brackets";
+		case NodeType::Operator_u: return "Unary operator";
+		case NodeType::Operator_b: return "Binary operator";
+		case NodeType::Reserved: return "Block starting with reserved word";
+		case NodeType::Literal: return "Literal";
+		case NodeType::Variable: return "Variable";
+	}
+}
+
+std::string graph::Node::text() {
+	std::string ret;
+	ret += to_text(type) + ": " + value + "\n";
+	return ret;
+}

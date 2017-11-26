@@ -5,11 +5,8 @@ Lab5_GUI::Lab5_GUI(QWidget *parent) : QWidget(parent) {
 	ui.setupUi(this);
 	auto temp = [this]() {
 		try {
-			auto res = parser::parse_syntax(ui.code->toPlainText().toStdString());
-			std::string temp;
-			for (auto it : res)
-				temp += it.to_string() + ";\t";
-			ui.result->setText(QString::fromStdString(temp));
+			auto res = parser::parse_syntax_pascal(ui.code->toPlainText().toStdString());
+			ui.result->setText("Compilation was successful!");
 		} catch (std::exception &e) {
 			ui.result->setText(e.what());
 		}
