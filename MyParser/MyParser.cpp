@@ -1,7 +1,7 @@
 #include "MyParser.hpp"
 #include <sstream>
 bool parser::additional::is_token(char c) {
-	std::string tokens = "{}-;()=[]+-*/%<>";
+	std::string tokens = "{}-;()=[]+-*/%<>:";
 	for (auto it : tokens)
 		if (c == it)
 			return true;
@@ -12,10 +12,12 @@ std::string parser::additional::simplify(std::string source) {
 	for (size_t i = 0; i < source.size(); i++) {
 		if (source[i] == '\n' || source[i] == '\t')
 			source[i] = ' ';
-		if (parser::additional::is_token(source[i]) || source[i] == ' ' || isalnum(source[i])) {
+		if (parser::additional::is_token(source[i]) || source[i] == ' ') {
 			source.insert(i + 1, " ");
 			source.insert(i, " ");
 			i += 2;
+		} else if (isalnum(source[i])) {
+
 		} else
 			throw std::exception("Unknown symbol was found.");
 	}
@@ -43,7 +45,7 @@ std::list<std::string> parser::additional::unite(std::list<std::string> source) 
 			it2++;
 		} else if (*it2 == "=" && (*it1 == "+" || *it1 == "-" 
 			|| *it1 == "*" || *it1 == "/" || *it1 == "<" 
-			|| *it1 == ">" || *it1 == "%" || *it1 == "=")) {
+			|| *it1 == ">" || *it1 == "%" || *it1 == "=" || *it1 == ":")) {
 
 			*it1 += *it2;
 			source.erase(it2);

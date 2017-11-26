@@ -2,8 +2,8 @@
 #include <list>
 using List = std::list<std::string>;
 List brackets = { "(", ")", "[", "]", "{", "}" };
-List operators = { "+", "-", "*", "/", "=", "%", "+=", "-=", "*=", "/=", "%=", "++", "--", "==", "<", ">", "<=", ">=" };
-List reserved = { "do", "while", "if", "break" };
+List operators = { "+", "-", "*", "/", "=", "%", "+=", "-=", "*=", "/=", "%=", "++", "--", "==", "<", ">", "<=", ">=", ":=" };
+List reserved = { "do", "while", "if", "break", "then", "end", "else", "begin" };
 
 bool is_(std::string source, List list) {
 	for (auto it : list)
