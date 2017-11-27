@@ -192,6 +192,8 @@ std::list<Graph> parser::parse_syntax(std::string source) {
 
 Graph parser::parse_syntax_pascal(std::string source) {
 	auto tokens = parse_tokens(source);
+	if (tokens.back().name != ";")
+		throw std::exception("';' was expected at the end of the program.");
 	for (auto it : tokens)
 		if (it.type == "Unknown")
 			throw std::exception(("Unknown token was met:\n" + it.text()).c_str());
