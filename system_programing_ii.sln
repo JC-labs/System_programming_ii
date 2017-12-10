@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Table", "Table\Table.vcxproj", "{068D222A-A42E-481C-975D-E8684F1558E1}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab4_GUI", "Lab4_GUI\Lab4_GUI.vcxproj", "{9D9C3EFE-DDE9-482C-B6A1-96805AA43666}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab5_GUI", "Lab5_GUI\Lab5_GUI.vcxproj", "{59D3DE26-76CB-4866-A126-7BE476796C69}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab6_GUI", "Lab6_GUI\Lab6_GUI.vcxproj", "{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,12 @@ Global
 		{59D3DE26-76CB-4866-A126-7BE476796C69}.Release|x64.ActiveCfg = Release|x64
 		{59D3DE26-76CB-4866-A126-7BE476796C69}.Release|x64.Build.0 = Release|x64
 		{59D3DE26-76CB-4866-A126-7BE476796C69}.Release|x86.ActiveCfg = Release|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Debug|x64.ActiveCfg = Debug|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Debug|x64.Build.0 = Debug|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Debug|x86.ActiveCfg = Debug|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Release|x64.ActiveCfg = Release|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Release|x64.Build.0 = Release|x64
+		{574CFC21-5B96-4DA9-AE74-04E18B9BCBD7}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
