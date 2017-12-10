@@ -14,6 +14,7 @@ namespace parser {
 		bool is_reserved(std::string source);
 		bool is_variable(std::string source);
 		bool is_literal(std::string source);
+		bool is_type_name(std::string source);
 	}
 	Token generate_token(std::string source);
 }

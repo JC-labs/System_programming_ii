@@ -2,8 +2,9 @@
 #include <list>
 using List = std::list<std::string>;
 List brackets = { "(", ")", "[", "]", "{", "}" };
-List operators = { "+", "-", "*", "/", "=", "%", "+=", "-=", "*=", "/=", "%=", "++", "--", "==", "<", ">", "<=", ">=", ":=" };
+List operators = { "+", "-", "*", "/", "=", "%", "+=", "-=", "*=", "/=", "%=", "++", "--", "==", "<", ">", "<=", ">=", ":=", "," };
 List reserved = { "do", "while", "if", "break", "then", "end", "else", "begin" };
+List type_name = { "int", "float" };
 
 bool is_(std::string source, List list) {
 	for (auto it : list)
@@ -20,6 +21,9 @@ bool parser::additional::is_operator(std::string source) {
 bool parser::additional::is_reserved(std::string source) {
 	return is_(source, reserved);
 }
+bool parser::additional::is_type_name(std::string source) {
+	return is_(source, type_name);
+}
 parser::Token parser::generate_token(std::string source) {
 	if (source == ";")
 		return Token("Punctuator", source);
@@ -29,6 +33,8 @@ parser::Token parser::generate_token(std::string source) {
 		return Token("Operator", source);
 	else if (additional::is_reserved(source))
 		return Token("Reserved word", source);
+	else if (additional::is_type_name(source))
+		return Token("Typename", source);
 	else if (additional::is_literal(source))
 		return Token("Literal", source);
 	else if (additional::is_variable(source))
@@ -36,11 +42,9 @@ parser::Token parser::generate_token(std::string source) {
 	else
 		return Token("Unknown", source);
 }
-
 std::string parser::Token::text() const {
 	return " " + type + ":\t" + name;
 }
-
 #include <cctype>
 bool parser::additional::is_variable(std::string source) {
 	if (!isalpha(source[0]))

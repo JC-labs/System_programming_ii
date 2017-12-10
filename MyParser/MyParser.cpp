@@ -1,7 +1,7 @@
 #include "MyParser.hpp"
 #include <sstream>
 bool parser::additional::is_token(char c) {
-	std::string tokens = "{}-;()=[]+-*/%<>:";
+	std::string tokens = "{}-;()=[]+-*/%<>:,";
 	for (auto it : tokens)
 		if (c == it)
 			return true;
@@ -124,12 +124,49 @@ graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
 				ret.right = it->right;
 				return ret;
 			}*/
+		} else if (it->type == NodeType::Typename) {
+			graph::Node ret;
+			ret.type = NodeType::Typename;
+			ret.value = it->value;
+			auto temp = it;
+			ret.left = nullptr;
+			ret.right = parse_variables(std::list<graph::Node>{++temp, source.end()});
+			return ret;
 		}
 	}
 	if (source.size() == 1)
 		return source.front();
 	else
 		throw std::exception("Something's wrong with syntax.");
+}
+graph::Node* parser::additional::parse_variables(std::list<graph::Node> source) {
+	for (auto it = source.begin(); it != source.end(); it++)
+		if (it->type == NodeType::Operator_b && it->value == ",") {
+			graph::Node *ret = new graph::Node;
+			ret->type = NodeType::Operator_b;
+			ret->value = it->value;
+			ret->left = parse_variables(std::list<graph::Node>{source.begin(), it});
+			ret->right = parse_variables(std::list<graph::Node>{++it, source.end()});
+			return ret;
+		}
+	for (auto it = source.begin(); it != source.end(); it++)
+		if (it->type == NodeType::Operator_u && it->value == "[]") { 
+			auto temp = it;
+			if (--temp != source.begin())
+				throw std::exception(("Unexpected code was met before []-brackets: " + (*(--temp)).value).c_str());
+			if (it != --source.end())
+				throw std::exception(("Unexpected code was met after []-brackets: " + (*(++it)).value).c_str());
+			graph::Node *ret = new graph::Node;
+			ret->type = NodeType::Operator_u;
+			ret->value = it->value;
+			ret->left = &*source.begin();
+			ret->right = nullptr;
+			return ret;
+		}
+	if (source.size() == 1)
+		return &source.front();
+	else
+		throw std::exception(("Unexpected code was met during variable initialization: " + (*(++source.begin())).value).c_str());
 }
 graph::Node* parser::additional::parse_graph(std::list<graph::Node> source) {
 	source = parse_brackets(source);
@@ -153,8 +190,9 @@ graph::Node* parser::additional::parse_graph(std::list<Token> source) {
 		} else if (it->type == "Operator") {
 			auto pre_it = it; if (it != source.begin()) pre_it--;
 			auto post_it = it; if (it != source.end()) post_it++;
-			if ((pre_it->type == "Variable" || pre_it->type == "Literal" || pre_it->name == "(" || pre_it->name == ")") &&
-				(post_it->type == "Variable" || post_it->type == "Literal") || post_it->name == "(" || post_it->name == ")")
+			if (((pre_it->type == "Variable" || pre_it->type == "Literal" || pre_it->name == "(" || pre_it->name == ")") &&
+				(post_it->type == "Variable" || post_it->type == "Literal") || post_it->name == "(" || post_it->name == ")") ||
+				it->name == ",")
 
 				nodes.push_back(graph::Node(NodeType::Operator_b, it->name));
 			else
@@ -165,6 +203,8 @@ graph::Node* parser::additional::parse_graph(std::list<Token> source) {
 			nodes.push_back(graph::Node(NodeType::Literal, it->name));
 		else if (it->type == "Variable")
 			nodes.push_back(graph::Node(NodeType::Variable, it->name));
+		else if (it->type == "Typename")
+			nodes.push_back(graph::Node(NodeType::Typename, it->name));
 		else
 			nodes.push_back(graph::Node(NodeType::Unknown, it->name));
 	auto ret = parse_graph(nodes);

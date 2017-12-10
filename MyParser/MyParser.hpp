@@ -19,6 +19,8 @@ namespace parser {
 		graph::Node* parse_graph_pascal(std::list<Token> source);
 		graph::Node parse_operators_pascal(std::list<graph::Node> source);
 		std::list<graph::Node> parse_brackets_pascal(std::list<graph::Node> source);
+
+		graph::Node* parse_variables(std::list<graph::Node> source);
 	}
 	std::list<Token> parse_tokens(std::string source);
 	std::list<Graph> parse_syntax(std::string source);

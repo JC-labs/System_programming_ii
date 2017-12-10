@@ -12,7 +12,8 @@ enum class NodeType {
 	Operator_b = 7,
 	Reserved = 8,
 	Literal = 9,
-	Variable = 10
+	Variable = 10,
+	Typename = 11
 };
 namespace graph {
 	struct Node {
