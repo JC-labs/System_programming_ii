@@ -150,19 +150,32 @@ graph::Node* parser::additional::parse_variables(std::list<graph::Node> source) 
 			return ret;
 		}
 	for (auto it = source.begin(); it != source.end(); it++)
-		if (it->type == NodeType::Operator_u && it->value == "[]") { 
-			auto temp = it;
-			if (--temp != source.begin())
-				throw std::exception(("Unexpected code was met before []-brackets: " + (*(--temp)).value).c_str());
-			if (it != --source.end())
-				throw std::exception(("Unexpected code was met after []-brackets: " + (*(++it)).value).c_str());
-			graph::Node *ret = new graph::Node;
-			ret->type = NodeType::Operator_u;
-			ret->value = it->value;
-			ret->left = &*source.begin();
-			ret->right = nullptr;
-			return ret;
-		}
+		if (it->type == NodeType::Operator_u)
+			if (it->value == "[]") {
+				auto temp = it;
+				if (--temp != source.begin())
+					throw std::exception(("Unexpected code was met before []-brackets: " + (*(--temp)).value).c_str());
+				if (it != --source.end())
+					throw std::exception(("Unexpected code was met after []-brackets: " + (*(++it)).value).c_str());
+				graph::Node *ret = new graph::Node;
+				ret->type = NodeType::Operator_u;
+				ret->value = it->value;
+				ret->left = new graph::Node(*source.begin());
+				ret->right = it->right;
+				return ret;
+			} else if (it->value == "*") {
+				if (it != source.begin())
+					throw std::exception(("Unexpected code was met before pointer symbol: " + (*(--it)).value).c_str());
+				auto temp = it;
+				if (++temp != --source.end())
+					throw std::exception(("Unexpected code was met after pointer symbol: " + (*(++it)).value).c_str());
+				graph::Node *ret = new graph::Node;
+				ret->type = NodeType::Operator_u;
+				ret->value = it->value;
+				ret->left = new graph::Node(*--source.end());
+				ret->right = nullptr;
+				return ret;
+			}
 	if (source.size() == 1)
 		return &source.front();
 	else
