@@ -33,11 +33,16 @@ namespace graph {
 		std::string text();
 	};
 }
+#include <list>
+class Graph;
+namespace parser {
+	void semantics_check(std::list<Graph>);
+}
 class Graph {
 	graph::Node *m_node;
 public:
 	Graph(graph::Node *n) : m_node(n) {}
 	friend std::ostream& operator<<(std::ostream &s, Graph *n);
 	std::string to_string();
+	friend void parser::semantics_check(std::list<Graph>);
 };
-

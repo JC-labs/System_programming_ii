@@ -4,7 +4,7 @@ using List = std::list<std::string>;
 List brackets = { "(", ")", "[", "]", "{", "}" };
 List operators = { "+", "-", "*", "/", "=", "%", "+=", "-=", "*=", "/=", "%=", "++", "--", "==", "<", ">", "<=", ">=", ":=", "," };
 List reserved = { "do", "while", "if", "break", "then", "end", "else", "begin" };
-List type_name = { "int", "float" };
+List type_name = { "int", "float", "bool" };
 
 bool is_(std::string source, List list) {
 	for (auto it : list)

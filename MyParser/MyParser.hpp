@@ -2,6 +2,7 @@
 #include "Token.hpp"
 #include "Graph.hpp"
 #include <list>
+#include <map>
 namespace parser {
 	namespace additional {
 		bool is_token(char c);
@@ -21,8 +22,13 @@ namespace parser {
 		std::list<graph::Node> parse_brackets_pascal(std::list<graph::Node> source);
 
 		graph::Node* parse_variables(std::list<graph::Node> source);
+
+		void addVariables(std::map<std::string, std::pair<std::string, size_t>> &variables, graph::Node *node, std::string type);
+		void isVariable(std::map<std::string, std::pair<std::string, size_t>> const& variables, graph::Node *node);
+		std::pair<std::string, size_t> determine_type(std::map<std::string, std::pair<std::string, size_t>> const& variables, graph::Node *node);
 	}
 	std::list<Token> parse_tokens(std::string source);
 	std::list<Graph> parse_syntax(std::string source);
-	Graph parse_syntax_pascal(std::string source); 
+	Graph parse_syntax_pascal(std::string source);
+	void semantics_check(std::list<Graph>);
 };

@@ -91,7 +91,7 @@ std::list<graph::Node> parser::additional::parse_brackets(std::list<graph::Node>
 }
 
 graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
-	for (auto it = source.begin(); it != source.end(); it++) {
+	for (auto it = source.begin(); it != source.end(); it++)
 		if (it->type == NodeType::Operator_b) {
 			graph::Node ret;
 			ret.type = NodeType::Operator_b;
@@ -99,7 +99,17 @@ graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
 			ret.left = parse_graph(std::list<graph::Node>{source.begin(), it});
 			ret.right = parse_graph(std::list<graph::Node>{++it, source.end()});
 			return ret;
-		} else if (it->type == NodeType::Operator_u) {
+		} else if (it->type == NodeType::Typename) {
+			graph::Node ret;
+			ret.type = NodeType::Typename;
+			ret.value = it->value;
+			auto temp = it;
+			ret.left = nullptr;
+			ret.right = parse_variables(std::list<graph::Node>{++temp, source.end()});
+			return ret;
+		}
+	for (auto it = source.begin(); it != source.end(); it++)
+		if (it->type == NodeType::Operator_u) {
 			if (it->value == "+" || it->value == "-" || it->value == "*" || it->value == "/"
 				|| it->value == "!" || it->value == "++" || it->value == "--") {
 
@@ -117,23 +127,8 @@ graph::Node parser::additional::parse_operators(std::list<graph::Node> source) {
 				ret.left = parse_graph(std::list<graph::Node>{source.begin(), it});
 				ret.right = it->right;
 				return ret;
-			} /*else if (it->value == "()" || it->value == "{}") {
-				graph::Node ret;
-				ret.type = NodeType::Operator_u;
-				ret.value = it->value;
-				ret.right = it->right;
-				return ret;
-			}*/
-		} else if (it->type == NodeType::Typename) {
-			graph::Node ret;
-			ret.type = NodeType::Typename;
-			ret.value = it->value;
-			auto temp = it;
-			ret.left = nullptr;
-			ret.right = parse_variables(std::list<graph::Node>{++temp, source.end()});
-			return ret;
+			}
 		}
-	}
 	if (source.size() == 1)
 		return source.front();
 	else
@@ -177,7 +172,7 @@ graph::Node* parser::additional::parse_variables(std::list<graph::Node> source) 
 				return ret;
 			}
 	if (source.size() == 1)
-		return &source.front();
+		return new graph::Node(source.front());
 	else
 		throw std::exception(("Unexpected code was met during variable initialization: " + (*(++source.begin())).value).c_str());
 }
@@ -203,8 +198,8 @@ graph::Node* parser::additional::parse_graph(std::list<Token> source) {
 		} else if (it->type == "Operator") {
 			auto pre_it = it; if (it != source.begin()) pre_it--;
 			auto post_it = it; if (it != source.end()) post_it++;
-			if (((pre_it->type == "Variable" || pre_it->type == "Literal" || pre_it->name == "(" || pre_it->name == ")") &&
-				(post_it->type == "Variable" || post_it->type == "Literal") || post_it->name == "(" || post_it->name == ")") ||
+			if (((pre_it->type == "Variable" || pre_it->type == "Literal" || pre_it->name == "(" || pre_it->name == ")" || pre_it->name == "*") &&
+				(post_it->type == "Variable" || post_it->type == "Literal") || post_it->name == "(" || post_it->name == ")" || post_it->name == "*") ||
 				it->name == ",")
 
 				nodes.push_back(graph::Node(NodeType::Operator_b, it->name));
@@ -394,4 +389,103 @@ std::list<graph::Node> parser::additional::parse_brackets_pascal(std::list<graph
 		return source;
 	//else
 	//	throw std::exception("Something's wrong with brackets.");
+}
+void parser::semantics_check(std::list<Graph> source) {
+	std::map<std::string, std::pair<std::string, size_t>> variables;
+	for (auto it : source) {
+		if (it.m_node->type == NodeType::Typename)
+			additional::addVariables(variables, it.m_node->right, it.m_node->value);
+		else
+			additional::isVariable(variables, it.m_node);
+	}
+	return;
+}
+void parser::additional::addVariables(std::map<std::string, std::pair<std::string, size_t>> &variables, graph::Node *node, std::string type) {
+	if (node->type == NodeType::Variable)
+		variables.insert(std::make_pair(node->value, std::make_pair(type, 1)));
+	else if (node->type == NodeType::Operator_u) {
+		if (node->value == "*")
+			variables.insert(std::make_pair(node->left->value, std::make_pair(type, 0)));
+		else if (node->value == "[]") {
+			if (node->right->type != NodeType::Literal)
+				throw std::exception(("Literal was expected as array size for " + node->left->value).c_str());
+			std::stringstream s(node->right->value);
+			size_t i;
+			s >> i;
+			variables.insert(std::make_pair(node->left->value, std::make_pair(type, i)));
+		}
+	} else if (node->type == NodeType::Operator_b && node->value == ",") {
+		addVariables(variables, node->left, type);
+		addVariables(variables, node->right, type);
+	}
+}
+void parser::additional::isVariable(std::map<std::string, std::pair<std::string, size_t>> const& variables, graph::Node *node) {
+	if (node == nullptr)
+		return;
+	else if (node->type == NodeType::Variable || node->type == NodeType::Operator_b) {
+		determine_type(variables, node);
+	} else {
+		isVariable(variables, node->left);
+		isVariable(variables, node->right);
+	}
+}
+bool is_bool(std::string s) {
+	return s == "==" || s == "!=" || s == "<=" || s == ">=" || s == "<" || s == ">";
+}
+std::pair<std::string, size_t> parser::additional::determine_type(std::map<std::string, std::pair<std::string, size_t>> const& variables, graph::Node *node) {
+	if (node->type == NodeType::Operator_b) {
+		auto lt = determine_type(variables, node->left);
+		auto rt = determine_type(variables, node->right);
+		auto ret = is_bool(node->value) ? std::make_pair("bool", 1) : lt;
+		if (lt == rt)
+			return ret;
+		else if (lt.first == rt.first && lt.second != 0 && rt.second != 0) {
+			ret.second = 1;
+			return ret;
+		} else {
+			std::stringstream el, er;
+			switch (lt.second) {
+				case 0:
+					el << lt.first << "*";
+					break;
+				case 1:
+					el << lt.first;
+					break;
+				default:
+					el << lt.first << "[" << lt.second << "]";
+			}
+			switch (rt.second) {
+				case 0:
+					er << rt.first << "*";
+					break;
+				case 1:
+					er << rt.first;
+					break;
+				default:
+					er << rt.first << "[" << rt.second << "]";
+			}
+			throw std::exception(("Incompatible values in operator" + node->value + ": \n\t" + node->left->value + " - " + el.str() + ";\n\t" + node->right->value + " - " + er.str() + ";").c_str());
+		}
+	} else if (node->type == NodeType::Variable) {
+		try {
+			return variables.at(node->value);
+		} catch (std::out_of_range) {
+			throw std::exception(("Unknown variable: " + node->value).c_str());
+		}
+	} else if (node->value == "[]") {
+		try {
+			return variables.at(node->left->value);
+		} catch (std::out_of_range) {
+			throw std::exception(("Unknown variable: " + node->value).c_str());
+		}
+	} else if (node->value == "*") {
+		try {
+			auto ret = variables.at(node->right->value);
+			ret.second = 1;
+			return ret;
+		} catch (std::out_of_range) {
+			throw std::exception(("Unknown variable: " + node->value).c_str());
+		}
+	}
+	throw std::exception("Unsupported type determination structure was used.");
 }
