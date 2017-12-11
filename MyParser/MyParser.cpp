@@ -401,8 +401,15 @@ void parser::semantics_check(std::list<Graph> source) {
 	return;
 }
 void parser::additional::addVariables(std::map<std::string, std::pair<std::string, size_t>> &variables, graph::Node *node, std::string type) {
-	if (node->type == NodeType::Variable)
-		variables.insert(std::make_pair(node->value, std::make_pair(type, 1)));
+	if (node->type == NodeType::Variable) {
+		try {
+			variables.at(node->value);
+		} catch (std::out_of_range) {
+			variables.insert(std::make_pair(node->value, std::make_pair(type, 1)));
+			return;
+		}
+		throw std::exception(("Variable " + node->value + " was already defined as " + variables.at(node->value).first + ".").c_str());
+	}
 	else if (node->type == NodeType::Operator_u) {
 		if (node->value == "*")
 			variables.insert(std::make_pair(node->left->value, std::make_pair(type, 0)));
@@ -474,6 +481,8 @@ std::pair<std::string, size_t> parser::additional::determine_type(std::map<std::
 		}
 	} else if (node->value == "[]") {
 		try {
+			if (variables.at(node->left->value).second <= 1)
+				throw std::exception(("Array was expected, but " + node->left->value + " was found.").c_str());
 			return variables.at(node->left->value);
 		} catch (std::out_of_range) {
 			throw std::exception(("Unknown variable: " + node->value).c_str());
